@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400;500;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto Slab", serif;
+}
+
+button {
+  font-family: inherit;
+}
+
+.calculator {
+  margin: 40px;
+  width: 250px;
+  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.my-btn {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #1f2327;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.my-btn:hover {
+  filter: brightness(120%);
+}
+
+.my-btn:active {
+  filter: brightness(130%);
+}
+
+.my-btn.primary {
+  background: #5e4bb6;
+}
+
+.my-btn.secondary {
+  background: #1f2327;
+}
+
+.my-btn.execute {
+  background-color: #ffc308;
+  min-width: 125px;
+}
+
+.result {
+  height: 80px;
+  background: white;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 0 10px;
+  color: #404040;
+  font-size: 1.5rem;
+}
