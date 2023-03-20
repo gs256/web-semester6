@@ -15,7 +15,8 @@ func main() {
 
 	engine.Static("./static", "./static/")
 	engine.LoadHTMLGlob("templates/**/*")
-	engine.Static("/image", "./resources")
+	// engine.Static("/image", "./resources")
+	engine.Static("/images/products", "./resources/products")
 
 	InitializeRoutes(engine)
 
