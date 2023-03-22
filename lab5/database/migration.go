@@ -2,6 +2,9 @@ package database
 
 import (
 	"fmt"
+	"lab5/orders"
+	"lab5/products"
+	"lab5/users"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -28,7 +31,7 @@ func Migrate() {
 	// }
 
 	// Migrate the schema
-	err = db.AutoMigrate(&ProductModel{})
+	err = db.AutoMigrate(&products.ProductModel{}, &orders.OrderModel{}, &users.UserModel{})
 	if err != nil {
 		panic("cant migrate db")
 	}

@@ -1,7 +1,6 @@
 package application
 
 import (
-	"lab5/product_repository"
 	"lab5/products"
 	"mime/multipart"
 	"net/http"
@@ -15,10 +14,10 @@ const imageRoute string = "/images/products/"
 const productImageDirectory string = "resources/products/"
 
 type AdminController struct {
-	repo *product_repository.Repository
+	repo *products.Repository
 }
 
-func (controller *AdminController) Initialize(engine *gin.Engine, repo *product_repository.Repository) {
+func (controller *AdminController) Initialize(engine *gin.Engine, repo *products.Repository) {
 	controller.repo = repo
 	engine.GET("/admin/products", controller.adminRoute)
 	engine.GET("/admin/products/delete/:id", controller.deleteRoute)

@@ -1,7 +1,6 @@
 package application
 
 import (
-	"lab5/product_repository"
 	"lab5/products"
 	"lab5/utils"
 	"net/http"
@@ -11,10 +10,10 @@ import (
 )
 
 type ProductController struct {
-	repo *product_repository.Repository
+	repo *products.Repository
 }
 
-func (controller *ProductController) Initialize(engine *gin.Engine, repo *product_repository.Repository) {
+func (controller *ProductController) Initialize(engine *gin.Engine, repo *products.Repository) {
 	controller.repo = repo
 	engine.GET("/products", controller.productsRoute)
 	engine.GET("/products/:productId", controller.productDetailsRoute)

@@ -1,8 +1,7 @@
-package product_repository
+package products
 
 import (
-	"lab5/database"
-	"lab5/products"
+	"fmt"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
@@ -13,9 +12,7 @@ type Repository struct {
 	db *gorm.DB
 }
 
-func New(dsn string) (*Repository, error) {
-	database.Migrate()
-
+func NewRepository(dsn string) (*Repository, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -27,8 +24,8 @@ func New(dsn string) (*Repository, error) {
 	}, nil
 }
 
-func (r *Repository) GetById(id string) (*products.Product, error) {
-	productModel := &database.ProductModel{}
+func (r *Repository) GetById(id string) (*Product, error) {
+	productModel := &ProductModel{}
 
 	err := r.db.First(productModel, "id = ?", id).Error
 
@@ -40,15 +37,15 @@ func (r *Repository) GetById(id string) (*products.Product, error) {
 	return &product, nil
 }
 
-func (r *Repository) GetAll() ([]products.Product, error) {
-	var productModels []database.ProductModel
+func (r *Repository) GetAll() ([]Product, error) {
+	var productModels []ProductModel
 	err := r.db.Find(&productModels).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	products := make([]products.Product, len(productModels))
+	products := make([]Product, len(productModels))
 
 	for i := 0; i < len(productModels); i++ {
 		products[len(productModels)-i-1] = ToProduct(&productModels[i])
@@ -57,7 +54,7 @@ func (r *Repository) GetAll() ([]products.Product, error) {
 	return products, err
 }
 
-func (r *Repository) Create(product *products.Product) error {
+func (r *Repository) Create(product *Product) error {
 	if len(product.Id) == 0 {
 		product.Id = uuid.New().String()
 	}
@@ -65,21 +62,21 @@ func (r *Repository) Create(product *products.Product) error {
 	return r.db.Create(&model).Error
 }
 
-func (r *Repository) Update(product *products.Product) error {
+func (r *Repository) Update(product *Product) error {
 	model := ToModel(product)
-	return r.db.Model(&database.ProductModel{}).Where("id = ?", model.Id).Updates(model).Error
+	return r.db.Model(&ProductModel{}).Where("id = ?", model.Id).Updates(model).Error
 }
 
 func (r *Repository) Delete(id string) error {
-	return r.db.Delete(&database.ProductModel{}, "id = ?", id).Error
+	return r.db.Delete(&ProductModel{}, "id = ?", id).Error
 }
 
 func (r *Repository) Clear() error {
-	return r.db.Exec("TRUNCATE product;").Error
+	return r.db.Exec(fmt.Sprintf("TRUNCATE %s;", ProductModel{}.TableName())).Error
 }
 
-func ToProduct(model *database.ProductModel) products.Product {
-	product := products.Product{
+func ToProduct(model *ProductModel) Product {
+	product := Product{
 		Id:          model.Id,
 		Name:        model.Name,
 		Description: model.Description,
@@ -90,8 +87,8 @@ func ToProduct(model *database.ProductModel) products.Product {
 	return product
 }
 
-func ToModel(product *products.Product) database.ProductModel {
-	model := database.ProductModel{
+func ToModel(product *Product) ProductModel {
+	model := ProductModel{
 		Id:          product.Id,
 		Name:        product.Name,
 		Description: product.Description,

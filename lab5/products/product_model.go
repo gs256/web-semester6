@@ -1,4 +1,4 @@
-package database
+package products
 
 type ProductModel struct {
 	Pk          uint `gorm:"primarykey"`

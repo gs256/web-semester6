@@ -8,14 +8,11 @@ import (
 )
 
 func main() {
-	// migrate()
-	// panic("")
 	engine := gin.Default()
 	application.New().Run(engine)
 
 	engine.Static("./static", "./static/")
 	engine.LoadHTMLGlob("templates/**/*")
-	// engine.Static("/image", "./resources")
 	engine.Static("/images/products", "./resources/products")
 
 	InitializeRoutes(engine)

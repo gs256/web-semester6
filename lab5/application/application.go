@@ -2,13 +2,13 @@ package application
 
 import (
 	"lab5/database"
-	"lab5/product_repository"
+	"lab5/products"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Application struct {
-	repo   *product_repository.Repository
+	repo   *products.Repository
 	engine *gin.Engine
 }
 
@@ -18,7 +18,7 @@ func New() *Application {
 
 func (app *Application) Run(engine *gin.Engine) {
 	app.engine = engine
-	app.repo, _ = product_repository.New(database.GetDsn())
+	app.repo, _ = products.NewRepository(database.GetDsn())
 	app.initializeControllers()
 }
 

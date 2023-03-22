@@ -2,7 +2,6 @@ package application
 
 import (
 	"lab5/database"
-	"lab5/product_repository"
 	"lab5/products"
 	"math/rand"
 	"net/http"
@@ -13,10 +12,10 @@ import (
 )
 
 type TestController struct {
-	repo *product_repository.Repository
+	repo *products.Repository
 }
 
-func (controller *TestController) Initialize(engine *gin.Engine, repo *product_repository.Repository) {
+func (controller *TestController) Initialize(engine *gin.Engine, repo *products.Repository) {
 	controller.repo = repo
 	engine.GET("/test", controller.testRoute)
 	engine.GET("/test/create-random", controller.createRandomRoute)
@@ -63,7 +62,7 @@ func (controller *TestController) clearRoute(c *gin.Context) {
 }
 
 func (controller *TestController) fillDbWithTestProducts(c *gin.Context) {
-	repo, _ := product_repository.New(database.GetDsn())
+	repo, _ := products.NewRepository(database.GetDsn())
 
 	for _, product := range ProductList {
 		repo.Create(&product)
