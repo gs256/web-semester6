@@ -1,13 +1,18 @@
 package application
 
 import (
-	"encoding/json"
 	"lab5/product_repository"
 	"lab5/products"
+	"mime/multipart"
 	"net/http"
+	"path"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
+
+const imageRoute string = "/images/products/"
+const productImageDirectory string = "resources/products/"
 
 type AdminController struct {
 	repo *product_repository.Repository
@@ -62,19 +67,25 @@ func (controller *AdminController) createFormRoute(c *gin.Context) {
 }
 
 type ProductRequestDto struct {
-	Name        string `json:"name"`
-	Price       int    `json:"price"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"imageUrl"`
+	Name        string                `form:"name"`
+	Price       int                   `form:"price"`
+	Description string                `form:"description"`
+	Image       *multipart.FileHeader `form:"image"`
 }
 
 func (controller *AdminController) createProductRoute(c *gin.Context) {
 	var productDto ProductRequestDto
-
-	err := json.NewDecoder(c.Request.Body).Decode(&productDto)
+	err := c.ShouldBind(&productDto)
 
 	if err != nil {
 		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, imageUrl, err := saveImageByRandomName(c, productDto.Image)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -83,7 +94,7 @@ func (controller *AdminController) createProductRoute(c *gin.Context) {
 		Name:        productDto.Name,
 		Description: productDto.Description,
 		Price:       productDto.Price,
-		ImageUrl:    productDto.ImageUrl,
+		ImageUrl:    imageUrl,
 	}
 
 	controller.repo.Create(&product)
@@ -93,10 +104,17 @@ func (controller *AdminController) editRoute(c *gin.Context) {
 	id := c.Param("id")
 	var productDto ProductRequestDto
 
-	err := json.NewDecoder(c.Request.Body).Decode(&productDto)
+	err := c.ShouldBind(&productDto)
 
 	if err != nil {
 		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, imageUrl, err := saveImageByRandomName(c, productDto.Image)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -105,12 +123,21 @@ func (controller *AdminController) editRoute(c *gin.Context) {
 		Name:        productDto.Name,
 		Description: productDto.Description,
 		Price:       productDto.Price,
-		ImageUrl:    productDto.ImageUrl,
+		ImageUrl:    imageUrl,
 	}
 
 	err = controller.repo.Update(&product)
 
 	if err != nil {
-		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func saveImageByRandomName(c *gin.Context, image *multipart.FileHeader) (string, string, error) {
+	randomString := uuid.New().String()
+	extension := path.Ext(image.Filename)
+	imageName := randomString + extension
+	err := c.SaveUploadedFile(image, productImageDirectory+imageName)
+	imageUrl := imageRoute + imageName
+	return imageName, imageUrl, err
 }

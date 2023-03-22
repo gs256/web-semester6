@@ -20,7 +20,7 @@ async function onApplyClicked() {
 
   const response = await fetch(window.location, {
     method: "POST",
-    body: JSON.stringify(requestBody),
+    body: requestBody,
   })
 
   if (!response.ok) {

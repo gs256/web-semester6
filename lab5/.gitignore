@@ -1,1 +1,3 @@
 **.exe
+resources/products/*
+!resources/products/.gitkeep

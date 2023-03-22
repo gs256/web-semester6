@@ -20,7 +20,7 @@ async function onSubmitClicked() {
 
   const response = await fetch("/admin/products/create", {
     method: "POST",
-    body: JSON.stringify(requestBody),
+    body: requestBody,
   })
 
   if (!response.ok) {
