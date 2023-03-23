@@ -5,6 +5,27 @@ import (
 	"math"
 )
 
+type ProductService struct {
+	repo *Repository
+}
+
+func NewProductService(repo *Repository) *ProductService {
+	return &ProductService{
+		repo: repo,
+	}
+}
+
+func (service *ProductService) GetAllProducts() ([]Product, error) {
+	if service == nil {
+		panic("service is nil")
+	}
+	if service.repo == nil {
+		panic("repo is nil")
+	}
+	products, err := service.repo.GetAll()
+	return products, err
+}
+
 func MaxPageNumber(products *[]Product, itemsOnPage int) int {
 	if len(*products) <= 0 {
 		return 1

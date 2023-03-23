@@ -8,8 +8,9 @@ import (
 )
 
 type Application struct {
-	repo   *products.Repository
-	engine *gin.Engine
+	productRepo    *products.Repository
+	engine         *gin.Engine
+	productService *products.ProductService
 }
 
 func New() *Application {
@@ -18,7 +19,8 @@ func New() *Application {
 
 func (app *Application) Run(engine *gin.Engine) {
 	app.engine = engine
-	app.repo, _ = products.NewRepository(database.GetDsn())
+	app.productRepo, _ = products.NewRepository(database.GetDsn())
+	app.productService = products.NewProductService(app.productRepo)
 	app.initializeControllers()
 }
 
@@ -26,8 +28,10 @@ func (app *Application) initializeControllers() {
 	testController := TestController{}
 	productController := ProductController{}
 	adminController := AdminController{}
+	apiController := ApiController{}
 
-	testController.Initialize(app.engine, app.repo)
-	productController.Initialize(app.engine, app.repo)
-	adminController.Initialize(app.engine, app.repo)
+	testController.Initialize(app.engine, app.productRepo)
+	productController.Initialize(app.engine, app.productRepo)
+	adminController.Initialize(app.engine, app.productRepo)
+	apiController.Initialize(app.engine, app.productService)
 }

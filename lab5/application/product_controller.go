@@ -10,7 +10,8 @@ import (
 )
 
 type ProductController struct {
-	repo *products.Repository
+	repo    *products.Repository
+	service *products.ProductService
 }
 
 func (controller *ProductController) Initialize(engine *gin.Engine, repo *products.Repository) {
@@ -20,7 +21,7 @@ func (controller *ProductController) Initialize(engine *gin.Engine, repo *produc
 }
 
 func (controller *ProductController) productsRoute(c *gin.Context) {
-	p, err := controller.repo.GetAll()
+	p, err := controller.service.GetAllProducts()
 	productsOnPage := p[:]
 
 	page, err := strconv.Atoi(c.Query("page"))
