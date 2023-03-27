@@ -56,12 +56,12 @@ func (r *Repository) GetAll() ([]Order, error) {
 	return orders, nil
 }
 
-func (r *Repository) Create(order *Order) error {
+func (r *Repository) Create(order *Order) (string, error) {
 	if len(order.Id) == 0 {
 		order.Id = uuid.New().String()
 	}
 	model := ToModel(order)
-	return r.db.Create(&model).Error
+	return order.Id, r.db.Create(&model).Error
 }
 
 func (r *Repository) Update(order *Order) error {

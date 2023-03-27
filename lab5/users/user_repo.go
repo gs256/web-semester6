@@ -54,12 +54,12 @@ func (r *Repository) GetAll() ([]User, error) {
 	return users, nil
 }
 
-func (r *Repository) Create(user *User) error {
+func (r *Repository) Create(user *User) (string, error) {
 	if len(user.Id) == 0 {
 		user.Id = uuid.New().String()
 	}
 	model := ToModel(user)
-	return r.db.Create(&model).Error
+	return user.Id, r.db.Create(&model).Error
 }
 
 func (r *Repository) Update(user *User) error {
