@@ -6,11 +6,12 @@ import (
 )
 
 type OrderModel struct {
-	Pk       uint `gorm:"primarykey"`
-	Id       string
-	UserId   uint
-	User     users.UserModel         `gorm:"foreignKey:UserId"`
-	Products []products.ProductModel `gorm:"many2many:product_orders;"`
+	Id string `gorm:"primaryKey"`
+
+	UserId string
+	User   users.UserModel `gorm:"foreignKey:UserId;associationForeignKey:Id"`
+
+	Products []products.ProductModel `gorm:"many2many:order_products"`
 }
 
 func (OrderModel) TableName() string {

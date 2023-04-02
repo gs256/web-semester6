@@ -14,8 +14,8 @@ type ProductController struct {
 	service *products.ProductService
 }
 
-func (controller *ProductController) Initialize(engine *gin.Engine, repo *products.Repository) {
-	controller.repo = repo
+func (controller *ProductController) Initialize(engine *gin.Engine, service *products.ProductService) {
+	controller.service = service
 	engine.GET("/products", controller.productsRoute)
 	engine.GET("/products/:productId", controller.productDetailsRoute)
 }

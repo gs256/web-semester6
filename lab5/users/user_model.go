@@ -1,8 +1,7 @@
 package users
 
 type UserModel struct {
-	Pk    uint `gorm:"primarykey"`
-	Id    string
+	Id    string `gorm:"primaryKey"`
 	Name  string
 	Phone string
 }

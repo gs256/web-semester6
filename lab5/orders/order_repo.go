@@ -3,7 +3,6 @@ package orders
 import (
 	"fmt"
 	"lab5/products"
-	"lab5/users"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
@@ -78,42 +77,30 @@ func (r *Repository) Clear() error {
 }
 
 func ToOrder(model *OrderModel) Order {
-	p := make([]products.Product, len(model.Products))
+	productIds := make([]string, len(model.Products))
 	for i, product := range model.Products {
-		p[i] = products.ToProduct(&product)
-		// p[i] = products.Product{
-		// 	Id:          product.Id,
-		// 	Name:        product.Name,
-		// 	Description: product.Description,
-		// 	Price:       product.Price,
-		// 	ImageUrl:    product.ImageUrl,
-		// }
+		productIds[i] = product.Id
 	}
 
 	order := Order{
-		Id: model.Id,
-		// User: users.User{
-		// 	Id:    model.User.Id,
-		// 	Name:  model.User.Name,
-		// 	Phone: model.User.Phone,
-		// },
-		User:     users.ToUser(&model.User),
-		Products: p,
+		Id:         model.Id,
+		UserId:     model.User.Id,
+		ProductIds: productIds,
 	}
 
 	return order
 }
 
 func ToModel(order *Order) OrderModel {
-	p := make([]products.ProductModel, len(order.Products))
-	for i, product := range order.Products {
-		p[i] = products.ToModel(&product)
+	productModels := make([]products.ProductModel, len(order.ProductIds))
+	for i, productId := range order.ProductIds {
+		productModels[i] = products.ProductModel{Id: productId}
 	}
 
 	model := OrderModel{
 		Id:       order.Id,
-		User:     users.ToModel(&order.User),
-		Products: p,
+		UserId:   order.UserId,
+		Products: productModels,
 	}
 
 	return model

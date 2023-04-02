@@ -1,8 +1,7 @@
 package products
 
 type ProductModel struct {
-	Pk          uint `gorm:"primarykey"`
-	Id          string
+	Id          string `gorm:"primaryKey"`
 	Name        string
 	Description string
 	Price       int
