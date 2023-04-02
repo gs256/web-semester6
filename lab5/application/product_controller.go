@@ -10,7 +10,6 @@ import (
 )
 
 type ProductController struct {
-	repo    *products.Repository
 	service *products.ProductService
 }
 
@@ -45,7 +44,7 @@ func (controller *ProductController) productsRoute(c *gin.Context) {
 
 func (controller *ProductController) productDetailsRoute(c *gin.Context) {
 	productId := c.Param("productId")
-	product, err := controller.repo.GetById(productId)
+	product, err := controller.service.GetProductById(productId)
 
 	if err != nil {
 		return404(c)

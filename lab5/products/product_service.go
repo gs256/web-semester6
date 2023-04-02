@@ -16,14 +16,13 @@ func NewProductService(repo *Repository) *ProductService {
 }
 
 func (service *ProductService) GetAllProducts() ([]Product, error) {
-	if service == nil {
-		panic("service is nil")
-	}
-	if service.repo == nil {
-		panic("repo is nil")
-	}
 	products, err := service.repo.GetAll()
 	return products, err
+}
+
+func (service *ProductService) GetProductById(id string) (Product, error) {
+	product, err := service.repo.GetById(id)
+	return *product, err
 }
 
 func MaxPageNumber(products *[]Product, itemsOnPage int) int {
