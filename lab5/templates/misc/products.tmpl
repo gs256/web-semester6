@@ -15,7 +15,8 @@
     </script>
     <body>
         <div class="container">
-            {{range  .products}}
+            <div>Cart</div>
+            {{range .products}}
                 <div class="product-item">
                     <img class="product-image" src={{ .ImageUrl }}/>
                     <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>

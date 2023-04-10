@@ -1,0 +1,31 @@
+{{ define "cart.tmpl" }}
+
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Cart</title>
+        <link href="/static/css/base.css" rel="stylesheet" />
+        <link href="/static/css/cart.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="cart cart-content">
+            <div class="container">
+                <div>
+                    Test
+                </div>
+            </div>
+            <div class="cart__sidebar">
+                <div class="cart__sidebar-form">
+                    <label>Name:</label><br/>
+                    <input class="cart__sidebar-form__name"/><br/>
+                    <label>Phone:</label><br/>
+                    <input class="cart__sidebar-form__phone"/><br/>
+                </div>
+                <button class="cart__sidebar-form__order-button">Order</button>
+            </div>
+        </div>
+    </body>
+</html>
+
+{{ end }}

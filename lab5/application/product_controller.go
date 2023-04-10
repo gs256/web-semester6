@@ -17,6 +17,7 @@ func (controller *ProductController) Initialize(engine *gin.Engine, service *pro
 	controller.service = service
 	engine.GET("/products", controller.productsRoute)
 	engine.GET("/products/:productId", controller.productDetailsRoute)
+	engine.GET("/cart", controller.cartRoute)
 }
 
 func (controller *ProductController) productsRoute(c *gin.Context) {
@@ -51,6 +52,10 @@ func (controller *ProductController) productDetailsRoute(c *gin.Context) {
 	} else {
 		c.HTML(http.StatusOK, "details.tmpl", product)
 	}
+}
+
+func (controller *ProductController) cartRoute(c *gin.Context) {
+	c.HTML(http.StatusOK, "cart.tmpl", nil)
 }
 
 func return404(c *gin.Context) {
