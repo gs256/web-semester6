@@ -26,6 +26,14 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	engine.POST("/api/orders/create", controller.orderCreateRoute)
 }
 
+type ProductDto struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Price       int    `json:"price"`
+	ImageUrl    string `json:"imageUrl"`
+}
+
 func (controller *ApiController) productsRoute(c *gin.Context) {
 	products, err := controller.productService.GetAllProducts()
 
@@ -33,7 +41,26 @@ func (controller *ApiController) productsRoute(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get products"})
 	}
 
-	c.JSON(http.StatusOK, products)
+	productDtos := ToProductDtos(products)
+	c.JSON(http.StatusOK, productDtos)
+}
+
+func ToProductDtos(products []products.Product) []ProductDto {
+	productDtos := make([]ProductDto, len(products))
+	for i := 0; i < len(products); i++ {
+		productDtos[len(products)-i-1] = ToProductDto(products[i])
+	}
+	return productDtos
+}
+
+func ToProductDto(product products.Product) ProductDto {
+	return ProductDto{
+		Id:          product.Id,
+		Name:        product.Name,
+		Description: product.Description,
+		Price:       product.Price,
+		ImageUrl:    product.ImageUrl,
+	}
 }
 
 func (controller *ApiController) usersRoute(c *gin.Context) {

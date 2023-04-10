@@ -7,13 +7,12 @@
         <title>Cart</title>
         <link href="/static/css/base.css" rel="stylesheet" />
         <link href="/static/css/cart.css" rel="stylesheet" />
+        <script type="module" src="/static/js/cart-page.js" defer></script>
     </head>
     <body>
+        {{ template "navbar.tmpl" .}}
         <div class="cart cart-content">
-            <div class="container">
-                <div>
-                    Test
-                </div>
+            <div class="container cart__item-list">
             </div>
             <div class="cart__sidebar">
                 <div class="cart__sidebar-form">

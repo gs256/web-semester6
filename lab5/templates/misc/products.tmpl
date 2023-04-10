@@ -14,8 +14,8 @@
         window.PAGE_COUNT = {{ .pageCount }}
     </script>
     <body>
+        {{ template "navbar.tmpl" .}}
         <div class="container">
-            <div>Cart</div>
             {{range .products}}
                 <div class="product-item">
                     <img class="product-image" src={{ .ImageUrl }}/>

@@ -10,6 +10,7 @@
         <script type="module" src="/static/js/admin/edit.js" defer></script>
     </head>
     <body>
+        {{ template "navbar.tmpl" .}}
         <div class="container">
             {{ template "admin/edit_form.tmpl" .}}
             <div class="edit-form-buttons">

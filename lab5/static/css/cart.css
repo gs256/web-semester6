@@ -4,7 +4,7 @@ body {
 
 .cart-content {
     margin: 0 auto;
-    height: 100vh;
+    min-height: 100vh;
     width: 900px;
     display: flex;
     flex-direction: row;
@@ -40,4 +40,43 @@ body {
 .cart__sidebar-form__order-button {
     width: 100%;
     height: 50px;
+}
+
+.cart__item {
+    height: 140px;
+    display: flex;
+    box-shadow: var(--thin-shadow);
+    margin: 10px;
+}
+
+.cart__item-image {
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    align-self: center;
+    margin-left: 20px;
+    object-fit: contain;
+}
+
+.cart__item-info {
+    width: 100%;
+    margin: 20px;
+}
+
+.cart__item-title {
+    font-size: 16px;
+}
+
+.cart__item-price {
+    font-size: 16px;
+    margin-top: 10px;
+    color: red;
+}
+
+.cart__item-remove {
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
 }
