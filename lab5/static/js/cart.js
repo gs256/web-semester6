@@ -34,6 +34,11 @@ export class Cart {
         return this.#cart.products ?? []
     }
 
+    clear() {
+        this.#cart.products = []
+        this.#save()
+    }
+
     #restore() {
         try {
             const cart = JSON.parse(localStorage.getItem("cart"))

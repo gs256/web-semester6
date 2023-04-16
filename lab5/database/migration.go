@@ -31,7 +31,7 @@ func Migrate() {
 	// }
 
 	// Migrate the schema
-	err = db.AutoMigrate(&products.ProductModel{}, &orders.OrderModel{}, &users.UserModel{})
+	err = db.AutoMigrate(&products.ProductModel{}, &orders.OrderModel{}, &users.UserModel{}, &orders.OrderProductsModel{})
 	if err != nil {
 		panic("cant migrate db")
 	}

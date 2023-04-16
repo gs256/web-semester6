@@ -6,7 +6,7 @@ import (
 )
 
 type OrderModel struct {
-	Id string `gorm:"primaryKey"`
+	Id string `gorm:"primaryKey;joinForeignKey:OrderId"`
 
 	UserId string
 	User   users.UserModel `gorm:"foreignKey:UserId;associationForeignKey:Id"`
@@ -16,4 +16,13 @@ type OrderModel struct {
 
 func (OrderModel) TableName() string {
 	return "order"
+}
+
+type OrderProductsModel struct {
+	OrderModelId   string `gorm:"primaryKey"`
+	ProductModelId string `gorm:"primaryKey"`
+}
+
+func (OrderProductsModel) TableName() string {
+	return "order_products"
 }

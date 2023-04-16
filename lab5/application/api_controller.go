@@ -150,7 +150,7 @@ type CreateOrderResponseDto struct {
 
 func (controller *ApiController) orderCreateRoute(c *gin.Context) {
 	var createOrderDto CreateOrderDto
-	err := c.ShouldBind(&createOrderDto)
+	err := c.BindJSON(&createOrderDto)
 
 	if err != nil {
 		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
