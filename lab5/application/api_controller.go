@@ -192,13 +192,14 @@ func (controller *ApiController) orderClearRoute(c *gin.Context) {
 }
 
 type OrderDto struct {
-	// TODO: Add order id here
+	Id       string       `json:"id"`
 	User     UserDto      `json:"user"`
 	Products []ProductDto `json:"products"`
 }
 
 func ToOrderDto(order orders.Order) OrderDto {
 	return OrderDto{
+		Id: order.Id,
 		User: UserDto{
 			Id:    order.User.Id,
 			Name:  order.User.Name,
