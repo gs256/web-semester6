@@ -33,7 +33,7 @@ func (controller *AdminController) adminRoute(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get products"})
 	} else {
-		c.HTML(http.StatusOK, "admin/admin.tmpl", gin.H{"products": products})
+		c.HTML(http.StatusOK, "admin/admin-products.tmpl", gin.H{"products": products})
 	}
 }
 

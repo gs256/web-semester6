@@ -30,7 +30,7 @@ func (app *Application) Run(engine *gin.Engine) {
 	app.orderRepo, _ = orders.NewRepository(database.GetDsn())
 	app.productService = products.NewProductService(app.productRepo)
 	app.userService = users.NewUserService(app.userRepo)
-	app.orderService = orders.NewOrderService(app.orderRepo)
+	app.orderService = orders.NewOrderService(app.orderRepo, app.userRepo, app.productRepo)
 	app.initializeControllers()
 }
 

@@ -3,10 +3,12 @@ package orders
 import (
 	"fmt"
 	"lab5/products"
+	"lab5/users"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repository struct {
@@ -39,17 +41,17 @@ func (r *Repository) GetById(id string) (*Order, error) {
 }
 
 func (r *Repository) GetAll() ([]Order, error) {
-	var models []OrderModel
-	err := r.db.Find(&models).Error
+	var orderModels []OrderModel
+	err := r.db.Preload(clause.Associations).Find(&orderModels).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	orders := make([]Order, len(models))
+	orders := make([]Order, len(orderModels))
 
-	for i := 0; i < len(models); i++ {
-		orders[len(models)-i-1] = ToOrder(&models[i])
+	for i := 0; i < len(orderModels); i++ {
+		orders[len(orderModels)-i-1] = ToOrder(&orderModels[i])
 	}
 
 	return orders, nil
@@ -73,33 +75,39 @@ func (r *Repository) Delete(id string) error {
 }
 
 func (r *Repository) Clear() error {
-	return r.db.Exec(fmt.Sprintf("TRUNCATE %s;", OrderModel{}.TableName())).Error
+	err := r.db.Exec(fmt.Sprintf("TRUNCATE \"%s\";", OrderProductsModel{}.TableName())).Error
+
+	if err != nil {
+		return err
+	}
+
+	return r.db.Exec(fmt.Sprintf("TRUNCATE \"%s\";", OrderModel{}.TableName())).Error
 }
 
 func ToOrder(model *OrderModel) Order {
-	productIds := make([]string, len(model.Products))
+	products_ := make([]products.Product, len(model.Products))
 	for i, product := range model.Products {
-		productIds[i] = product.Id
+		products_[i] = products.ToProduct(&product)
 	}
 
 	order := Order{
-		Id:         model.Id,
-		UserId:     model.User.Id,
-		ProductIds: productIds,
+		Id:       model.Id,
+		User:     users.ToUser(&model.User),
+		Products: products_,
 	}
 
 	return order
 }
 
 func ToModel(order *Order) OrderModel {
-	productModels := make([]products.ProductModel, len(order.ProductIds))
-	for i, productId := range order.ProductIds {
-		productModels[i] = products.ProductModel{Id: productId}
+	productModels := make([]products.ProductModel, len(order.Products))
+	for i, product := range order.Products {
+		productModels[i] = products.ProductModel{Id: product.Id}
 	}
 
 	model := OrderModel{
 		Id:       order.Id,
-		UserId:   order.UserId,
+		UserId:   order.User.Id,
 		Products: productModels,
 	}
 

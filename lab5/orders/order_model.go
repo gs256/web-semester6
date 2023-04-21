@@ -9,9 +9,9 @@ type OrderModel struct {
 	Id string `gorm:"primaryKey;joinForeignKey:OrderId"`
 
 	UserId string
-	User   users.UserModel `gorm:"foreignKey:UserId;associationForeignKey:Id"`
+	User   users.UserModel `gorm:"foreignKey:UserId;references:Id;constraint:OnDelete:CASCADE;"`
 
-	Products []products.ProductModel `gorm:"many2many:order_products"`
+	Products []products.ProductModel `gorm:"many2many:order_products;constraint:OnDelete:CASCADE;"`
 }
 
 func (OrderModel) TableName() string {

@@ -23,6 +23,8 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	engine.GET("/api/users", controller.usersRoute)
 	engine.POST("/api/users/create", controller.userCreateRoute)
 	engine.DELETE("/api/users/remove/:id", controller.userRemoveRoute)
+	engine.GET("/api/orders", controller.ordersRoute)
+	engine.DELETE("/api/orders/all", controller.orderClearRoute)
 	engine.POST("/api/orders/create", controller.orderCreateRoute)
 }
 
@@ -166,4 +168,50 @@ func (controller *ApiController) orderCreateRoute(c *gin.Context) {
 
 	response := CreateOrderResponseDto{OrderId: id}
 	c.JSON(http.StatusOK, response)
+}
+
+func (controller *ApiController) ordersRoute(c *gin.Context) {
+	orders, err := controller.orderService.GetAllOrders()
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	orderDtos := ToOrderDtos(orders)
+	c.JSON(http.StatusOK, orderDtos)
+}
+
+func (controller *ApiController) orderClearRoute(c *gin.Context) {
+	err := controller.orderService.Clear()
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+}
+
+type OrderDto struct {
+	// TODO: Add order id here
+	User     UserDto      `json:"user"`
+	Products []ProductDto `json:"products"`
+}
+
+func ToOrderDto(order orders.Order) OrderDto {
+	return OrderDto{
+		User: UserDto{
+			Id:    order.User.Id,
+			Name:  order.User.Name,
+			Phone: order.User.Phone,
+		},
+		Products: ToProductDtos(order.Products),
+	}
+}
+
+func ToOrderDtos(orders []orders.Order) []OrderDto {
+	orderDtos := make([]OrderDto, len(orders))
+	for i := 0; i < len(orderDtos); i++ {
+		orderDtos[i] = ToOrderDto(orders[i])
+	}
+	return orderDtos
 }
