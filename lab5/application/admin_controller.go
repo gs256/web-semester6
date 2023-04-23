@@ -1,7 +1,9 @@
 package application
 
 import (
+	"lab5/orders"
 	"lab5/products"
+	"lab5/users"
 	"mime/multipart"
 	"net/http"
 	"path"
@@ -14,21 +16,27 @@ const imageRoute string = "/images/products/"
 const productImageDirectory string = "resources/products/"
 
 type AdminController struct {
-	repo *products.Repository
+	productRepo  *products.Repository
+	orderService *orders.OrderService
+	userService  *users.UserService
 }
 
-func (controller *AdminController) Initialize(engine *gin.Engine, repo *products.Repository) {
-	controller.repo = repo
+func (controller *AdminController) Initialize(engine *gin.Engine, productRepo *products.Repository, orderService *orders.OrderService, userService *users.UserService) {
+	controller.productRepo = productRepo
+	controller.orderService = orderService
+	controller.userService = userService
 	engine.GET("/admin/products", controller.adminRoute)
 	engine.GET("/admin/products/delete/:id", controller.deleteRoute)
 	engine.GET("/admin/products/create", controller.createFormRoute)
 	engine.POST("/admin/products/create", controller.createProductRoute)
 	engine.GET("/admin/products/edit/:id", controller.editFormRoute)
 	engine.POST("/admin/products/edit/:id", controller.editRoute)
+	engine.GET("/admin/orders", controller.ordersRoute)
+	engine.GET("/admin/users", controller.usersRoute)
 }
 
 func (controller *AdminController) adminRoute(c *gin.Context) {
-	products, err := controller.repo.GetAll()
+	products, err := controller.productRepo.GetAll()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get products"})
@@ -40,7 +48,7 @@ func (controller *AdminController) adminRoute(c *gin.Context) {
 func (controller *AdminController) deleteRoute(c *gin.Context) {
 	id := c.Param("id")
 
-	err := controller.repo.Delete(id)
+	err := controller.productRepo.Delete(id)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't delete item with such id"})
@@ -52,7 +60,7 @@ func (controller *AdminController) deleteRoute(c *gin.Context) {
 func (controller *AdminController) editFormRoute(c *gin.Context) {
 	id := c.Param("id")
 
-	product, err := controller.repo.GetById(id)
+	product, err := controller.productRepo.GetById(id)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get item with such id"})
@@ -96,7 +104,7 @@ func (controller *AdminController) createProductRoute(c *gin.Context) {
 		ImageUrl:    imageUrl,
 	}
 
-	controller.repo.Create(&product)
+	controller.productRepo.Create(&product)
 }
 
 func (controller *AdminController) editRoute(c *gin.Context) {
@@ -125,7 +133,7 @@ func (controller *AdminController) editRoute(c *gin.Context) {
 		ImageUrl:    imageUrl,
 	}
 
-	err = controller.repo.Update(&product)
+	err = controller.productRepo.Update(&product)
 
 	if err != nil {
 		http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
@@ -139,4 +147,24 @@ func saveImageByRandomName(c *gin.Context, image *multipart.FileHeader) (string,
 	err := c.SaveUploadedFile(image, productImageDirectory+imageName)
 	imageUrl := imageRoute + imageName
 	return imageName, imageUrl, err
+}
+
+func (controller *AdminController) ordersRoute(c *gin.Context) {
+	orders, err := controller.orderService.GetAllOrders()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get products"})
+	} else {
+		c.HTML(http.StatusOK, "admin/admin-orders.tmpl", gin.H{"orders": orders})
+	}
+}
+
+func (controller *AdminController) usersRoute(c *gin.Context) {
+	users, err := controller.userService.GetAllUsers()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't get products"})
+	} else {
+		c.HTML(http.StatusOK, "admin/admin-users.tmpl", gin.H{"users": users})
+	}
 }

@@ -1,0 +1,37 @@
+{{ define "admin/admin-orders.tmpl" }}
+
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Admin</title>
+        <link href="/static/css/base.css" rel="stylesheet" />
+        <link href="/static/css/admin.css" rel="stylesheet" />
+    </head>
+    <body>
+        {{ template "navbar.tmpl" .}}
+        {{ template "admin/admin-navbar.tmpl" .}}
+        <div class="container">
+            <h1>Orders</h1>
+            <div class="admin-order-list">
+                <br/>
+                {{range .orders}}
+                    <div>
+                        <p><b>Id</b>: {{ .Id }}</p>
+                        <p><b>Name</b>: {{ .User.Name }}</p>
+                        <p><b>Phone</b>: {{ .User.Phone }}</p>
+                        <p><b>Products:</b></p>
+                        <p><b>Date:</b> {{ .CreatedAt.Year }}</p>
+                        {{ range .Products }}
+                            <li>{{ .Name }}</li>
+                        {{ end }}
+                        <br/>
+                        <br/>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+    </body>
+</html>
+
+{{ end }}

@@ -42,6 +42,6 @@ func (app *Application) initializeControllers() {
 
 	testController.Initialize(app.engine, app.productRepo)
 	productController.Initialize(app.engine, app.productService)
-	adminController.Initialize(app.engine, app.productRepo)
+	adminController.Initialize(app.engine, app.productRepo, app.orderService, app.userService)
 	apiController.Initialize(app.engine, app.productService, app.userService, app.orderService)
 }
