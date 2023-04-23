@@ -5,6 +5,7 @@ import (
 	"lab5/products"
 	"lab5/users"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,7 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	engine.GET("/api/orders", controller.ordersRoute)
 	engine.DELETE("/api/orders/all", controller.orderClearRoute)
 	engine.POST("/api/orders/create", controller.orderCreateRoute)
+	engine.POST("/api/orders/filter", controller.orderFilterRoute)
 }
 
 type ProductDto struct {
@@ -150,6 +152,11 @@ type CreateOrderResponseDto struct {
 	OrderId string `json:"orderId" binding:"required"`
 }
 
+type OrderFilterDto struct {
+	MinDate time.Time `json:"minDate"`
+	MaxDate time.Time `json:"maxDate"`
+}
+
 func (controller *ApiController) orderCreateRoute(c *gin.Context) {
 	var createOrderDto CreateOrderDto
 	err := c.BindJSON(&createOrderDto)
@@ -168,6 +175,26 @@ func (controller *ApiController) orderCreateRoute(c *gin.Context) {
 
 	response := CreateOrderResponseDto{OrderId: id}
 	c.JSON(http.StatusOK, response)
+}
+
+func (controller *ApiController) orderFilterRoute(c *gin.Context) {
+	var orderFilterDto OrderFilterDto
+	err := c.BindJSON(&orderFilterDto)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	orders, err := controller.orderService.GetWithinTimespan(orderFilterDto.MinDate, orderFilterDto.MaxDate)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	orderDtos := ToOrderDtos(orders)
+	c.JSON(http.StatusOK, orderDtos)
 }
 
 func (controller *ApiController) ordersRoute(c *gin.Context) {
@@ -192,9 +219,10 @@ func (controller *ApiController) orderClearRoute(c *gin.Context) {
 }
 
 type OrderDto struct {
-	Id       string       `json:"id"`
-	User     UserDto      `json:"user"`
-	Products []ProductDto `json:"products"`
+	Id        string       `json:"id"`
+	User      UserDto      `json:"user"`
+	Products  []ProductDto `json:"products"`
+	CreatedAt time.Time    `json:"createdAt"`
 }
 
 func ToOrderDto(order orders.Order) OrderDto {
@@ -205,7 +233,8 @@ func ToOrderDto(order orders.Order) OrderDto {
 			Name:  order.User.Name,
 			Phone: order.User.Phone,
 		},
-		Products: ToProductDtos(order.Products),
+		Products:  ToProductDtos(order.Products),
+		CreatedAt: order.CreatedAt,
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"lab5/products"
 	"lab5/users"
+	"time"
 )
 
 type OrderService struct {
@@ -40,9 +41,10 @@ func (service *OrderService) CreateOrder(userId string, productIds []string) (st
 	}
 
 	order := Order{
-		Id:       "",
-		User:     users.User{Id: userId},
-		Products: products_,
+		Id:        "",
+		User:      users.User{Id: userId},
+		Products:  products_,
+		CreatedAt: time.Now(),
 	}
 
 	id, err := service.orderRepo.Create(&order)
@@ -51,6 +53,11 @@ func (service *OrderService) CreateOrder(userId string, productIds []string) (st
 
 func (service *OrderService) GetAllOrders() ([]Order, error) {
 	orders, err := service.orderRepo.GetAll()
+	return orders, err
+}
+
+func (service *OrderService) GetWithinTimespan(start time.Time, end time.Time) ([]Order, error) {
+	orders, err := service.orderRepo.GetWithinTimespan(start, end)
 	return orders, err
 }
 

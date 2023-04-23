@@ -3,6 +3,7 @@ package orders
 import (
 	"lab5/products"
 	"lab5/users"
+	"time"
 )
 
 type OrderModel struct {
@@ -12,6 +13,8 @@ type OrderModel struct {
 	User   users.UserModel `gorm:"foreignKey:UserId;references:Id;constraint:OnDelete:CASCADE;"`
 
 	Products []products.ProductModel `gorm:"many2many:order_products;constraint:OnDelete:CASCADE;"`
+
+	CreatedAt time.Time
 }
 
 func (OrderModel) TableName() string {

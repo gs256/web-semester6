@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"lab5/products"
 	"lab5/users"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
@@ -57,6 +58,23 @@ func (r *Repository) GetAll() ([]Order, error) {
 	return orders, nil
 }
 
+func (r *Repository) GetWithinTimespan(start time.Time, end time.Time) ([]Order, error) {
+	var orderModels []OrderModel
+	err := r.db.Where("created_at BETWEEN ? AND ?", start, end).Preload(clause.Associations).Find(&orderModels).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	orders := make([]Order, len(orderModels))
+
+	for i := 0; i < len(orderModels); i++ {
+		orders[len(orderModels)-i-1] = ToOrder(&orderModels[i])
+	}
+
+	return orders, nil
+}
+
 func (r *Repository) Create(order *Order) (string, error) {
 	if len(order.Id) == 0 {
 		order.Id = uuid.New().String()
@@ -91,9 +109,10 @@ func ToOrder(model *OrderModel) Order {
 	}
 
 	order := Order{
-		Id:       model.Id,
-		User:     users.ToUser(&model.User),
-		Products: products_,
+		Id:        model.Id,
+		User:      users.ToUser(&model.User),
+		Products:  products_,
+		CreatedAt: model.CreatedAt,
 	}
 
 	return order
