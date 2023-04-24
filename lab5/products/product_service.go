@@ -25,6 +25,17 @@ func (service *ProductService) GetProductById(id string) (Product, error) {
 	return *product, err
 }
 
+func (service *ProductService) RemoveProductById(id string) error {
+	_, err := service.repo.GetById(id)
+
+	if err != nil {
+		return err
+	}
+
+	err = service.repo.Delete(id)
+	return err
+}
+
 func MaxPageNumber(products *[]Product, itemsOnPage int) int {
 	if len(*products) <= 0 {
 		return 1

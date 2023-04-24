@@ -21,10 +21,11 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	controller.userService = userService
 	controller.orderService = orderService
 	engine.GET("/api/products", controller.productsRoute)
+	engine.DELETE("/api/products/:id", controller.productsDeleteRoute)
 	engine.GET("/api/users", controller.usersRoute)
 	engine.POST("/api/users/create", controller.userCreateRoute)
 	engine.POST("/api/users/edit", controller.userEditRoute)
-	engine.DELETE("/api/users/remove/:id", controller.userRemoveRoute)
+	engine.DELETE("/api/users/:id", controller.userRemoveRoute)
 	engine.GET("/api/orders", controller.ordersRoute)
 	engine.DELETE("/api/orders/all", controller.orderClearRoute)
 	engine.POST("/api/orders/create", controller.orderCreateRoute)
@@ -48,6 +49,15 @@ func (controller *ApiController) productsRoute(c *gin.Context) {
 
 	productDtos := ToProductDtos(products)
 	c.JSON(http.StatusOK, productDtos)
+}
+
+func (controller *ApiController) productsDeleteRoute(c *gin.Context) {
+	id := c.Param("id")
+	err := controller.productService.RemoveProductById(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Couldn't delete product"})
+	}
 }
 
 func ToProductDtos(products []products.Product) []ProductDto {
