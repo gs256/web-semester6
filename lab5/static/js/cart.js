@@ -3,10 +3,8 @@ const cartSchema = Object.freeze({
 })
 
 export class Cart {
-    #cart
-
     constructor() {
-        this.#cart = { ...cartSchema }
+        this._cart = { ...cartSchema }
     }
 
     addProduct(productId) {
@@ -15,40 +13,41 @@ export class Cart {
             return
         }
 
-        if (this.#cart.products.includes(productId)) {
+        if (this._cart?.products.includes(productId)) {
             this.#save()
             return
         }
 
-        this.#cart.products.push(productId)
+        this._cart.products.push(productId)
         this.#save()
     }
 
     removeProduct(productId) {
-        this.#cart.products = this.#cart.products.filter(id => id != productId)
+        this._cart.products = this._cart.products.filter(id => id != productId)
         this.#save()
     }
 
     products() {
         this.#restore()
-        return this.#cart.products ?? []
+        return this._cart?.products ?? []
     }
 
     clear() {
-        this.#cart.products = []
+        this._cart.products = []
         this.#save()
     }
 
     #restore() {
         try {
             const cart = JSON.parse(localStorage.getItem("cart"))
-            this.#cart = cart
+            if (cart) this._cart = cart
+            else this._cart = { ...cartSchema }
         } catch {
-            this.#cart = { ...cartSchema }
+            this._cart = { ...cartSchema }
         }
     }
 
     #save() {
-        localStorage.setItem("cart", JSON.stringify(this.#cart))
+        localStorage.setItem("cart", JSON.stringify(this._cart))
     }
 }
