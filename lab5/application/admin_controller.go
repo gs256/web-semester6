@@ -25,17 +25,17 @@ func (controller *AdminController) Initialize(engine *gin.Engine, productRepo *p
 	controller.productRepo = productRepo
 	controller.orderService = orderService
 	controller.userService = userService
-	engine.GET("/admin/products", controller.adminRoute)
-	engine.GET("/admin/products/delete/:id", controller.deleteRoute)
-	engine.GET("/admin/products/create", controller.createFormRoute)
+	engine.GET("/admin/products", controller.productsRoute)
+	engine.GET("/admin/products/delete/:id", controller.deleteProductRoute)
+	engine.GET("/admin/products/create", controller.createProductFormRoute)
 	engine.POST("/admin/products/create", controller.createProductRoute)
-	engine.GET("/admin/products/edit/:id", controller.editFormRoute)
-	engine.POST("/admin/products/edit/:id", controller.editRoute)
+	engine.GET("/admin/products/edit/:id", controller.editProductFormRoute)
+	engine.POST("/admin/products/edit/:id", controller.editProductRoute)
 	engine.GET("/admin/orders", controller.ordersRoute)
 	engine.GET("/admin/users", controller.usersRoute)
 }
 
-func (controller *AdminController) adminRoute(c *gin.Context) {
+func (controller *AdminController) productsRoute(c *gin.Context) {
 	products, err := controller.productRepo.GetAll()
 
 	if err != nil {
@@ -45,7 +45,7 @@ func (controller *AdminController) adminRoute(c *gin.Context) {
 	}
 }
 
-func (controller *AdminController) deleteRoute(c *gin.Context) {
+func (controller *AdminController) deleteProductRoute(c *gin.Context) {
 	id := c.Param("id")
 
 	err := controller.productRepo.Delete(id)
@@ -57,7 +57,7 @@ func (controller *AdminController) deleteRoute(c *gin.Context) {
 	}
 }
 
-func (controller *AdminController) editFormRoute(c *gin.Context) {
+func (controller *AdminController) editProductFormRoute(c *gin.Context) {
 	id := c.Param("id")
 
 	product, err := controller.productRepo.GetById(id)
@@ -69,7 +69,7 @@ func (controller *AdminController) editFormRoute(c *gin.Context) {
 	}
 }
 
-func (controller *AdminController) createFormRoute(c *gin.Context) {
+func (controller *AdminController) createProductFormRoute(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin/create.tmpl", gin.H{})
 }
 
@@ -107,7 +107,7 @@ func (controller *AdminController) createProductRoute(c *gin.Context) {
 	controller.productRepo.Create(&product)
 }
 
-func (controller *AdminController) editRoute(c *gin.Context) {
+func (controller *AdminController) editProductRoute(c *gin.Context) {
 	id := c.Param("id")
 	var productDto ProductRequestDto
 
