@@ -63,6 +63,12 @@ func (r *Repository) Create(user *User) (string, error) {
 }
 
 func (r *Repository) Update(user *User) error {
+	_, err := r.GetById(user.Id)
+
+	if err != nil {
+		return err
+	}
+
 	model := ToModel(user)
 	return r.db.Model(&UserModel{}).Where("id = ?", model.Id).Updates(model).Error
 }

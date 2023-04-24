@@ -20,6 +20,11 @@ func (service *UserService) CreateUser(user User) (string, error) {
 	return id, err
 }
 
+func (service *UserService) UpdateUser(user User) error {
+	err := service.repo.Update(&user)
+	return err
+}
+
 func (service *UserService) RemoveUser(id string) error {
 	err := service.repo.Delete(id)
 	return err

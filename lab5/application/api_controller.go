@@ -23,6 +23,7 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	engine.GET("/api/products", controller.productsRoute)
 	engine.GET("/api/users", controller.usersRoute)
 	engine.POST("/api/users/create", controller.userCreateRoute)
+	engine.POST("/api/users/edit", controller.userEditRoute)
 	engine.DELETE("/api/users/remove/:id", controller.userRemoveRoute)
 	engine.GET("/api/orders", controller.ordersRoute)
 	engine.DELETE("/api/orders/all", controller.orderClearRoute)
@@ -109,6 +110,32 @@ func (controller *ApiController) userCreateRoute(c *gin.Context) {
 	user.Id = id
 	userDto := ToDto(&user)
 	c.JSON(http.StatusOK, userDto)
+}
+
+func (controller *ApiController) userEditRoute(c *gin.Context) {
+	var userDto UserDto
+	err := c.BindJSON(&userDto)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	user := DtoToUser(userDto)
+	err = controller.userService.UpdateUser(user)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+}
+
+func DtoToUser(userDto UserDto) users.User {
+	return users.User{
+		Id:    userDto.Id,
+		Name:  userDto.Name,
+		Phone: userDto.Phone,
+	}
 }
 
 func (controller *ApiController) userRemoveRoute(c *gin.Context) {
