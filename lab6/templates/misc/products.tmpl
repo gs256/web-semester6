@@ -1,0 +1,48 @@
+{{ define "products.tmpl" }}
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Products</title>
+        <link href="/static/css/base.css" rel="stylesheet" />
+        <link href="/static/css/products.css" rel="stylesheet" />
+        <script type="module" src="/static/js/products-pagination.js" defer></script>
+        <script type="module" src="/static/js/products.js" defer></script>
+    </head>
+    <script>
+        window.PAGE_NUMBER = {{ .page }}
+        window.PAGE_COUNT = {{ .pageCount }}
+    </script>
+    <body>
+        {{ template "navbar.tmpl" .}}
+        <div class="container">
+            {{range .products}}
+                <div class="product-item">
+                    <img class="product-image" src={{ .ImageUrl }}/>
+                    <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>
+                    <span class="product-price">{{ .Price }}₽</span>
+                    <button class="product-add-to-cart-button" data-id="{{ .Id }}">Add to cart</button>
+                </div>
+            {{end}}
+            <div class="pagination">
+                {{ if (ne .page 1) }}
+                    <a href="#" class="pagination-button previous">←</a>
+                {{ end }}
+                <span class="pagination-text">{{ .page }} / {{ .pageCount }}</span>
+                {{ if (ne .page .pageCount) }}
+                    <a href="#" class="pagination-button next">→ </a>
+                {{ end }}
+            </div>
+            <div class="top-div">
+                <h2>Ограничение</h2>
+                <input type="number" min="1" class="top-input" style="width: 80px"></input>
+                <a href="#" style="text-decoration: none">
+                    <button class="item-limit-submit">Применить</button>
+                    <button class="item-limit-reset">Сбросить</button>
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
+
+{{ end }}
