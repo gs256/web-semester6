@@ -10,7 +10,7 @@ body {
     flex-direction: row;
 }
 
-.container {
+.page-content {
     margin: 0 auto;
     padding-top: 10px;
     background-color: white;

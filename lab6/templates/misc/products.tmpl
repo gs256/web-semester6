@@ -4,11 +4,11 @@
     <head>
         <meta charset='utf-8'>
         <title>Products</title>
+        {{ template "global-include.tmpl" .}}
         <link href="/static/css/base.css" rel="stylesheet" />
         <link href="/static/css/products.css" rel="stylesheet" />
         <script type="module" src="/static/js/products-pagination.js" defer></script>
         <script type="module" src="/static/js/products.js" defer></script>
-        {{ template "global-include.tmpl" .}}
     </head>
     <script>
         window.PAGE_NUMBER = {{ .page }}
@@ -16,13 +16,20 @@
     </script>
     <body>
         {{ template "navbar.tmpl" .}}
-        <div class="container">
+        <div class="page-content">
             {{range .products}}
                 <div class="product-item">
-                    <img class="product-image" src={{ .ImageUrl }}/>
-                    <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>
-                    <span class="product-price">{{ .Price }}₽</span>
-                    <button class="product-add-to-cart-button btn btn-primary" data-id="{{ .Id }}">Add to cart</button>
+                    <div class="product-item__image-container">
+                        <img class="product-image" src={{ .ImageUrl }}/>
+                    </div>
+                    <div class="product-item__name-container">
+                        <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>
+                        <p class="product-item__description">{{ .Description }}</p>
+                    </div>
+                    <div class="product-item__side-container">
+                        <span class="product-price">{{ .Price }}₽</span>
+                        <button class="product-add-to-cart-button btn btn-primary" data-id="{{ .Id }}">Add to cart</button>
+                    </div>
                 </div>
             {{end}}
             <div class="pagination">

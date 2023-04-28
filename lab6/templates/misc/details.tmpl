@@ -3,12 +3,12 @@
     <head>
         <meta charset='utf-8'>
         <title>Details {{ .Id }}</title>
+        {{ template "global-include.tmpl" .}}
         <link href="/static/css/base.css" rel="stylesheet" />
         <link href="/static/css/products.css" rel="stylesheet" />
-        {{ template "global-include.tmpl" .}}
     </head>
     <body>
-        <div class="container">
+        <div class="page-content">
             <div class="item-details">
                 <img class="details-image" src={{ .ImageUrl }}/>
                 <h1 class="details-name">{{ .Name }}</h1>

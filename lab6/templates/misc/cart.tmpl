@@ -5,15 +5,15 @@
     <head>
         <meta charset='utf-8'>
         <title>Cart</title>
+        {{ template "global-include.tmpl" .}}
         <link href="/static/css/base.css" rel="stylesheet" />
         <link href="/static/css/cart.css" rel="stylesheet" />
         <script type="module" src="/static/js/cart-page.js" defer></script>
-        {{ template "global-include.tmpl" .}}
     </head>
     <body>
         {{ template "navbar.tmpl" .}}
         <div class="cart cart-content">
-            <div class="container cart__item-list">
+            <div class="page-content cart__item-list">
             </div>
             <div class="cart__sidebar">
                 <div class="cart__sidebar-form">
