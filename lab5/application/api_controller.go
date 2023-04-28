@@ -30,6 +30,7 @@ func (controller *ApiController) Initialize(engine *gin.Engine, productService *
 	engine.DELETE("/api/orders/all", controller.orderClearRoute)
 	engine.POST("/api/orders/create", controller.orderCreateRoute)
 	engine.POST("/api/orders/filter", controller.orderFilterRoute)
+	engine.POST("/api/analytics/order-history", controller.orderHistoryRoute)
 }
 
 type ProductDto struct {
@@ -232,6 +233,30 @@ func (controller *ApiController) orderFilterRoute(c *gin.Context) {
 
 	orderDtos := ToOrderDtos(orders)
 	c.JSON(http.StatusOK, orderDtos)
+}
+
+type OrderHistoryRequestDto struct {
+	UserId string `json:"userId" binding:"required"`
+}
+
+func (controller *ApiController) orderHistoryRoute(c *gin.Context) {
+	var orderHistoryDto OrderHistoryRequestDto
+	err := c.BindJSON(&orderHistoryDto)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	products, err := controller.orderService.GetUserOrderHistory(orderHistoryDto.UserId)
+
+	if err != nil {
+		http.Error(c.Writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	productDtos := ToProductDtos(products)
+	c.JSON(http.StatusOK, productDtos)
 }
 
 func (controller *ApiController) ordersRoute(c *gin.Context) {

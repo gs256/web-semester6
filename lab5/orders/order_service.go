@@ -64,3 +64,27 @@ func (service *OrderService) GetWithinTimespan(start time.Time, end time.Time) (
 func (service *OrderService) Clear() error {
 	return service.orderRepo.Clear()
 }
+
+func (service *OrderService) GetUserOrderHistory(userId string) ([]products.Product, error) {
+	_, err := service.userRepo.GetById(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("No user with id %s", userId)
+	}
+
+	orders, err := service.orderRepo.GetByUserId(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("No user with id %s", userId)
+	}
+
+	products_ := make([]products.Product, 0)
+
+	for _, order := range orders {
+		for _, product := range order.Products {
+			products_ = append(products_, product)
+		}
+	}
+
+	return products_, nil
+}

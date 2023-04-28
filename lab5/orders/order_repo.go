@@ -75,6 +75,23 @@ func (r *Repository) GetWithinTimespan(start time.Time, end time.Time) ([]Order,
 	return orders, nil
 }
 
+func (r *Repository) GetByUserId(userId string) ([]Order, error) {
+	var orderModels []OrderModel
+	err := r.db.Where("user_id = ?", userId).Preload(clause.Associations).Find(&orderModels).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	orders := make([]Order, len(orderModels))
+
+	for i := 0; i < len(orderModels); i++ {
+		orders[len(orderModels)-i-1] = ToOrder(&orderModels[i])
+	}
+
+	return orders, nil
+}
+
 func (r *Repository) Create(order *Order) (string, error) {
 	if len(order.Id) == 0 {
 		order.Id = uuid.New().String()

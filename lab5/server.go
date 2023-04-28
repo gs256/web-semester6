@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	migrate()
+	// migrate()
 	engine := gin.Default()
 	application.New().Run(engine)
 
