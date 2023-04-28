@@ -8,6 +8,7 @@
         <link href="/static/css/products.css" rel="stylesheet" />
         <script type="module" src="/static/js/products-pagination.js" defer></script>
         <script type="module" src="/static/js/products.js" defer></script>
+        {{ template "global-include.tmpl" .}}
     </head>
     <script>
         window.PAGE_NUMBER = {{ .page }}
@@ -21,7 +22,7 @@
                     <img class="product-image" src={{ .ImageUrl }}/>
                     <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>
                     <span class="product-price">{{ .Price }}₽</span>
-                    <button class="product-add-to-cart-button" data-id="{{ .Id }}">Add to cart</button>
+                    <button class="product-add-to-cart-button btn btn-primary" data-id="{{ .Id }}">Add to cart</button>
                 </div>
             {{end}}
             <div class="pagination">

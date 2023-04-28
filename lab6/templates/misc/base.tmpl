@@ -6,6 +6,7 @@
         <title>{{template "title" .}}</title>
         <link href="/static/css/base.css" rel="stylesheet" />
         {{template "links" .}}
+        {{ template "global-include.tmpl" .}}
     </head>
     <body>
         {{template "main" .}}
