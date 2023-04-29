@@ -8,9 +8,10 @@
         <link href="/static/css/products.css" rel="stylesheet" />
     </head>
     <body>
+        {{ template "navbar.tmpl" .}}
         <div class="page-content">
             <div class="item-details">
-                <img class="details-image" src={{ .ImageUrl }}/>
+                <img class="details-image img-thumbnail" src={{ .ImageUrl }}/>
                 <h1 class="details-name">{{ .Name }}</h1>
                 <h1 class="details-price">{{ .Price }}₽</h1>
                 <h1 class="details-description-header">Описание</h1>
