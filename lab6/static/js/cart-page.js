@@ -89,15 +89,15 @@ for (const productId of cartProductIds) {
 
 function createCartItemElement(name, price, imageUrl) {
     const innerHtml = `
-    <img class="cart__item-image" src="${imageUrl}"/>
+    <img class="cart__item-image img-thumbnail" src="${imageUrl}"/>
     <div class="cart__item-info">
         <h1 class="cart__item-title">${name}</h1>
         <h1 class="cart__item-price">${price} ₽</h1>
     </div>
-    <button class="cart__item-remove">x</button>
+    <button class="cart__item-remove btn btn-close"></button>
 `
     const div = document.createElement("div")
-    div.classList.add("cart__item")
+    div.classList.add("card", "cart__item")
     div.innerHTML = innerHtml.trim()
     return div
 }

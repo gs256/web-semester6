@@ -13,16 +13,16 @@
     <body>
         {{ template "navbar.tmpl" .}}
         <div class="cart cart-content">
-            <div class="page-content cart__item-list">
+            <div class="page-content cart__item-list border">
             </div>
             <div class="cart__sidebar">
-                <div class="cart__sidebar-form">
-                    <label>Name:</label><br/>
-                    <input class="cart__sidebar-form__name"/><br/>
-                    <label>Phone:</label><br/>
-                    <input class="cart__sidebar-form__phone"/><br/>
+                <div class="cart__sidebar-form card">
+                    <label>Name:</label>
+                    <input class="cart__sidebar-form__name form-control"/><br/>
+                    <label>Phone:</label>
+                    <input class="cart__sidebar-form__phone form-control"/><br/>
                 </div>
-                <button class="cart__sidebar-form__order-button">Order</button>
+                <button class="cart__sidebar-form__order-button btn btn-warning">Order</button>
             </div>
         </div>
     </body>
