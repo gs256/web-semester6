@@ -24,3 +24,4 @@ func main() {
 func migrate() {
 	database.Migrate()
 }
+

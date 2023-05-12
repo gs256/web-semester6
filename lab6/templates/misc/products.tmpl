@@ -7,8 +7,8 @@
         {{ template "global-include.tmpl" .}}
         <link href="/static/css/base.css" rel="stylesheet" />
         <link href="/static/css/products.css" rel="stylesheet" />
-        <script type="module" src="/static/js/products-pagination.js" defer></script>
         <script type="module" src="/static/js/products.js" defer></script>
+        <script type="module" src="/static/js/products-pagination.js" defer></script>
     </head>
     <script>
         window.PAGE_NUMBER = {{ .page }}
@@ -16,31 +16,7 @@
     </script>
     <body>
         {{ template "navbar.tmpl" .}}
-        <div class="page-content">
-            {{range .products}}
-                <div class="product-item card">
-                    <div class="product-item__image-container">
-                        <img class="product-image img-thumbnail" src={{ .ImageUrl }}/>
-                    </div>
-                    <div class="product-item__name-container">
-                        <a href="/products/{{ .Id }}" class="product-name">{{ .Name }}</a>
-                        <p class="product-item__description">{{ .Description }}</p>
-                    </div>
-                    <div class="product-item__side-container">
-                        <span class="product-price">{{ .Price }}₽</span>
-                        <button class="product-add-to-cart-button btn btn-primary" data-id="{{ .Id }}">Add to cart</button>
-                    </div>
-                </div>
-            {{end}}
-            <div class="pagination">
-                {{ if (ne .page 1) }}
-                    <a href="#" class="pagination-button previous">←</a>
-                {{ end }}
-                <span class="pagination-text">{{ .page }} / {{ .pageCount }}</span>
-                {{ if (ne .page .pageCount) }}
-                    <a href="#" class="pagination-button next">→ </a>
-                {{ end }}
-            </div>
+        <div class="page-content product-list-root">
             <div class="top-div card">
                 <h2 class="h2">Ограничение</h2>
                 <input type="number" min="1" class="top-input form-control mt-3"></input>
