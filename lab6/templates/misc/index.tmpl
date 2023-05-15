@@ -3,16 +3,10 @@
     <head>
         <meta charset='utf-8'>
         <title>Home</title>
-        {{ template "global-include.tmpl" .}}
         <link href="/static/css/base.css" rel="stylesheet" />
+        <script type="module" src="/static/js/app/app.js" defer></script>
     </head>
     <body>
-        <div class="page-content" style="margin: 40px">
-            <h1>Home Page</h1>
-            <a href="/products">/products</a></br>
-            <a href="/admin/products">/admin/products</a></br>
-            </br>
-            <a href="/test/fill-with-test-data">/test/fill-with-test-data</a></br>
-        </div>
+        <div id="root"></div>
     </body>
 </html>
