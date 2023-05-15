@@ -15,9 +15,13 @@ type ProductController struct {
 
 func (controller *ProductController) Initialize(engine *gin.Engine, service *products.ProductService) {
 	controller.service = service
-	engine.GET("/products", controller.productsRoute)
+	engine.GET("/products", controller.indexRoute)
 	engine.GET("/products/:productId", controller.productDetailsRoute)
 	engine.GET("/cart", controller.cartRoute)
+}
+
+func (controller *ProductController) indexRoute(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.tmpl", nil)
 }
 
 func (controller *ProductController) productsRoute(c *gin.Context) {

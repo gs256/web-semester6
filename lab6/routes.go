@@ -7,11 +7,9 @@ import (
 )
 
 func InitializeRoutes(r *gin.Engine) {
-	r.GET("/", homeRoute)
+	r.GET("/", indexRoute)
 }
 
-func homeRoute(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"title": "Main website",
-	})
+func indexRoute(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.tmpl", nil)
 }

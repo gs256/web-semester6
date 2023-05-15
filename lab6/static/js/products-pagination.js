@@ -9,56 +9,55 @@ const itemLimitResetButton = document.querySelector(".item-limit-reset")
 const pageNumber = getPageNumber()
 
 function getPageNumber() {
-  const params = Object.fromEntries(urlSearchParams.entries())
+    const params = Object.fromEntries(urlSearchParams.entries())
 
-  let pageNumber = window.PAGE_NUMBER
+    let pageNumber = window.PAGE_NUMBER
 
-  if (parseInt(params.page) != pageNumber) {
-    updateUrlParam("page", pageNumber)
-  }
+    if (parseInt(params.page) != pageNumber) {
+        updateUrlParam("page", pageNumber)
+    }
 
-  if (pageNumber == null || pageNumber == undefined || pageNumber < 0)
-    pageNumber = 1
+    if (pageNumber == null || pageNumber == undefined || pageNumber < 0) pageNumber = 1
 
-  return pageNumber
+    return pageNumber
 }
 
 function previousPage() {
-  if (pageNumber <= 1) return
-  updateUrlParam("page", pageNumber - 1)
+    if (pageNumber <= 1) return
+    updateUrlParam("page", pageNumber - 1)
 }
 
 function nextPage() {
-  updateUrlParam("page", pageNumber + 1)
+    updateUrlParam("page", pageNumber + 1)
 }
 
 function updateUrlParam(key, value) {
-  urlSearchParams.set(key, value)
-  window.location.search = urlSearchParams.toString()
+    urlSearchParams.set(key, value)
+    window.location.search = urlSearchParams.toString()
 }
 
 function deleteUrlParam(name) {
-  urlSearchParams.delete(name)
-  window.location.search = urlSearchParams.toString()
+    urlSearchParams.delete(name)
+    window.location.search = urlSearchParams.toString()
 }
 
 function setItemLimit(value) {
-  if (!parseInt(value)) return
-  updateUrlParam("max", value)
+    if (!parseInt(value)) return
+    updateUrlParam("max", value)
 }
 
 function submitItemLimit() {
-  const limit = parseInt(itemLimitInput.value)
-  if (!limit || limit <= 0) {
-    alert("Invalid limit")
-    return
-  }
+    const limit = parseInt(itemLimitInput.value)
+    if (!limit || limit <= 0) {
+        alert("Invalid limit")
+        return
+    }
 
-  setItemLimit(limit)
+    setItemLimit(limit)
 }
 
 function resetItemLimit() {
-  deleteUrlParam("max")
+    deleteUrlParam("max")
 }
 
 previousPageButton?.addEventListener("click", previousPage)

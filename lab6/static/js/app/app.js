@@ -7,5 +7,5 @@ const route = window.location.pathname
 if (route === "/") {
     new HomePage(root).render()
 } else if (route == "/products") {
-    new ProductPage(root).render()
+    new ProductPage(root, window).render()
 }

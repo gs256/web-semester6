@@ -1,3 +1,5 @@
+import { Navbar } from "./navbar.js"
+
 export class HomePage {
     constructor(root) {
         this.root = root
@@ -13,6 +15,7 @@ export class HomePage {
                 <a href="/test/fill-with-test-data">/test/fill-with-test-data</a></br>
             </div>
         `
+        new Navbar(this.root).render()
         this.root.insertAdjacentHTML("beforeend", html)
     }
 }
