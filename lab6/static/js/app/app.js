@@ -1,3 +1,4 @@
+import { CartPage } from "./cart-page.js"
 import { HomePage } from "./home-page.js"
 import { ProductPage } from "./product-page.js"
 
@@ -7,5 +8,7 @@ const route = window.location.pathname
 if (route === "/") {
     new HomePage(root).render()
 } else if (route == "/products") {
-    new ProductPage(root, window).render()
+    new ProductPage(root).render()
+} else if (route == "/cart") {
+    new CartPage(root).render()
 }

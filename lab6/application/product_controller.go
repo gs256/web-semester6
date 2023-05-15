@@ -17,7 +17,7 @@ func (controller *ProductController) Initialize(engine *gin.Engine, service *pro
 	controller.service = service
 	engine.GET("/products", controller.indexRoute)
 	engine.GET("/products/:productId", controller.productDetailsRoute)
-	engine.GET("/cart", controller.cartRoute)
+	engine.GET("/cart", controller.indexRoute)
 }
 
 func (controller *ProductController) indexRoute(c *gin.Context) {

@@ -3,9 +3,8 @@ import { Navbar } from "./navbar.js"
 import { appendCss } from "./page-utils.js"
 
 export class ProductPage {
-    constructor(root, window) {
+    constructor(root) {
         this.root = root
-        this.window = window
     }
 
     render() {
@@ -29,12 +28,6 @@ export class ProductPage {
     }
 
     async productsContentScript() {
-        // window.onpageshow = event => {
-        //     if (event.persisted) {
-        //         window.location.reload()
-        //     }
-        // }
-
         async function getProducts() {
             const response = await fetch("/api/products")
             return response.json()
@@ -203,6 +196,7 @@ export class ProductPage {
 
         function resetItemLimit() {
             deleteUrlParam("max")
+            updateUrlParam("page", 1)
         }
 
         previousPageButton?.addEventListener("click", previousPage)
