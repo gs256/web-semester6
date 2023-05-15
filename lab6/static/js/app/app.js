@@ -1,3 +1,4 @@
+import { AdminPage } from "./admin-page.js"
 import { CartPage } from "./cart-page.js"
 import { HomePage } from "./home-page.js"
 import { ProductDetailsPage } from "./product-details-page.js"
@@ -8,10 +9,12 @@ const route = window.location.pathname
 
 if (route === "/") {
     new HomePage(root).render()
-} else if (route == "/products") {
+} else if (route === "/products") {
     new ProductPage(root).render()
 } else if (route.startsWith("/products/")) {
     new ProductDetailsPage(root).render()
-} else if (route == "/cart") {
+} else if (route === "/cart") {
     new CartPage(root).render()
+} else if (route.startsWith("/admin")) {
+    new AdminPage(root).render()
 }

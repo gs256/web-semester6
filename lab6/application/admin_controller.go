@@ -25,7 +25,7 @@ func (controller *AdminController) Initialize(engine *gin.Engine, productRepo *p
 	controller.productRepo = productRepo
 	controller.orderService = orderService
 	controller.userService = userService
-	engine.GET("/admin/products", controller.productsRoute)
+	engine.GET("/admin/products", controller.indexRoute)
 	engine.GET("/admin/products/delete/:id", controller.deleteProductRoute)
 	engine.GET("/admin/products/create", controller.createProductFormRoute)
 	engine.POST("/admin/products/create", controller.createProductRoute)
@@ -33,6 +33,10 @@ func (controller *AdminController) Initialize(engine *gin.Engine, productRepo *p
 	engine.POST("/admin/products/edit/:id", controller.editProductRoute)
 	engine.GET("/admin/orders", controller.ordersRoute)
 	engine.GET("/admin/users", controller.usersRoute)
+}
+
+func (controller *AdminController) indexRoute(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.tmpl", nil)
 }
 
 func (controller *AdminController) productsRoute(c *gin.Context) {
