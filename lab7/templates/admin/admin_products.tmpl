@@ -1,0 +1,37 @@
+{{ define "admin/admin-products.tmpl" }}
+
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Admin</title>
+        {{ template "global-include.tmpl" .}}
+        <link href="/static/css/base.css" rel="stylesheet" />
+        <link href="/static/css/admin.css" rel="stylesheet" />
+    </head>
+    <body>
+        {{ template "navbar.tmpl" .}}
+        {{ template "admin/admin-navbar.tmpl" .}}
+        <div class="page-content">
+            <h1>Products</h1>
+            <div class="admin-product-list">
+                {{range .products}}
+                    <div class="admin-product-item">
+                        <span class="admin-item-name">
+                            <span>{{ .Name }}</span>
+                        </span>
+                        <div class="admin-item__buttons">
+                            <a class="admin-item-edit link-button" href="/admin/products/edit/{{ .Id }}">Edit</a>
+                            <a class="admin-item-delete link-button" href="/admin/products/delete/{{ .Id }}">Delete</a>
+                        </div>
+                    </div>
+                {{end}}
+            </div>
+            <a href="/admin/products/create">
+                <button>Create</button>
+            </a>
+        </div>
+    </body>
+</html>
+
+{{ end }}

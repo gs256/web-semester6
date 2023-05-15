@@ -1,0 +1,23 @@
+{{ define "admin/create.tmpl" }}
+
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Create product</title>
+        {{ template "global-include.tmpl" .}}
+        <link href="/static/css/base.css" rel="stylesheet" />
+        <link href="/static/css/admin.css" rel="stylesheet" />
+        <script type="module" src="/static/js/admin/create.js" defer></script>
+    </head>
+    <body>
+        {{ template "navbar.tmpl" .}}
+        <div class="page-content">
+            {{ template "admin/edit_form.tmpl" .}}
+            <button class="product-edit__submit">Submit</button>
+            <button class="product-edit__go-back">Go back</button>
+        </div>
+    </body>
+</html>
+
+{{ end }}
